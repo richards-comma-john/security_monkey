@@ -275,10 +275,10 @@ def create_user_init(email, role,password):
                                           password=encrypt_password(password),
                                           confirmed_at=datetime.now())
 
-    user.role = role
+        user.role = role
 
-    db.session.add(user)
-    db.session.commit()
+        db.session.add(user)
+        db.session.commit()
     
 @manager.option('-a', '--accounts', dest='accounts', type=text_type, default=u'all')
 def disable_accounts(accounts):
