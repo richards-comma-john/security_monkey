@@ -251,7 +251,35 @@ def create_user(email, role):
     db.session.add(user)
     db.session.commit()
 
+@manager.command
+@manager.option('-e', '--email', dest='email', type=text_type, required=True)
+@manager.option('-r', '--role', dest='role', type=str, required=True)
+@manager.option('-p', '--password', dest='role', type=str, required=True)
+def create_user_init(email, role,password):
+    from flask_security import SQLAlchemyUserDatastore
+    from security_monkey.datastore import User
+    from security_monkey.datastore import Role
+    from flask_security.utils import encrypt_password
 
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+
+    ROLES = ['View', 'Comment', 'Justify', 'Admin']
+    if role not in ROLES:
+        sys.stderr.write('[!] Role must be one of [{0}].\n'.format(' '.join(ROLES)))
+        sys.exit(1)
+
+    users = User.query.filter(User.email == email)
+
+    if users.count() == 0:
+        user = user_datastore.create_user(email=email,
+                                          password=encrypt_password(password),
+                                          confirmed_at=datetime.now())
+
+    user.role = role
+
+    db.session.add(user)
+    db.session.commit()
+    
 @manager.option('-a', '--accounts', dest='accounts', type=text_type, default=u'all')
 def disable_accounts(accounts):
     """ Bulk disables one or more accounts """
