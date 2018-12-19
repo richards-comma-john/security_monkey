@@ -400,6 +400,23 @@ def _post_metric(event_type, amount, account_name=None, tech=None):
                 'Dimensions': [
                     {
                         'Name': 'tech',
+                        'Value': 'task_queue'
+                    }
+                ]
+            }
+        ]
+    )
+    cw_client.put_metric_data(
+        Namespace=app.config.get('METRICS_NAMESPACE', 'securitymonkey'),
+        MetricData=[
+            {
+                'MetricName': event_type,
+                'Timestamp': int(time.time()),
+                'Value': amount,
+                'Unit': 'Count',
+                'Dimensions': [
+                    {
+                        'Name': 'tech',
                         'Value': tech
                     },
                     {
