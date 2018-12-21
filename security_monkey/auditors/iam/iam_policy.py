@@ -127,6 +127,8 @@ class IAMPolicyAuditor(Auditor):
         """
         issue = Categories.SENSITIVE_PERMISSIONS
         notes = Categories.SENSITIVE_PERMISSIONS_NOTES_1
+        
+        permissions = {"iam:passrole"}
 
         for policy in self.load_iam_policies(item):
             for statement in policy.statements:
@@ -135,10 +137,12 @@ class IAMPolicyAuditor(Auditor):
                     continue
 
                 if statement.effect == 'Allow':
-                    if 'iam:passrole' in statement.actions_expanded:
+                    permissions = statement.actions_expanded.intersection(permissions)
+                    if permissions:
+                        actions = json.dumps(sorted(list(permissions)))
                         resources = json.dumps(sorted(list(statement.resources)))
-                        notes = notes.format(actions='["iam:passrole"]', resource=resources)
-                        self.add_issue(10, issue, item, notes=notes)
+                        note = notes.format(actions=actions, resource=resources)
+                        self.add_issue(10, issue, item, notes=note)
 
     def check_notaction(self, item):
         """
