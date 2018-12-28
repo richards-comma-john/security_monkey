@@ -44,14 +44,14 @@ def report_auditor_changes(auditor):
        for item in auditor.items:
             for issue in item.confirmed_new_issues:
                 # Create a text output of your auditor new issue in scope
-                attachment = "ID: {!s}\n Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}\n Issue: {!s}".format(issue.id, item.index, item.account, item.region, item.name, issue.issue)
+                attachment = "Account: {}\nRegion: {}\nIndex: {}\nItemName: {}\nItemActive: {}\nItemFoundNewIssues: {}\nAuditIssues: {}\nConfirmedNewIssues: {}\nConfirmedFixedIssues: {}\nConfirmedExistingIssues: {}\nNewConfig: {}\nOldConfig: {}\nActionInstructions: {}\nBackgroundInfo: {}\nFixed: {}\nIssueID: {}\nIssue: {}\nItemID: {}\nJustification: {}\nJustified: {}\nJustifiedDate: {}\nJustifiedUserID: {}\nNotes: {}\nOrigin: {}\nOriginSummary: {}\nIssueScore: {}".format(item.account, item.region, item.index, item.name, item.active, item.found_new_issue, item.audit_issues, item.confirmed_new_issues, item.confirmed_fixed_issues, item.confirmed_existing_issues, item.new_config, item.old_config, issue.action_instructions, issue.background_info, issue.fixed, issue.id, issue.issue, issue.item_id, issue.justification, issue.justified, issue.justified_date, issue.justified_user_id, issue.notes, issue.origin, issue.origin_summary, issue.score, issue.user)
                 print("attachment: " + attachment)
                 app.logger.info("Custom Alerter: confirmed_new_issues")
                 publish_to_sns(attachment)
                 #postMessage(attachment, "Auditor - Reporting on Issue Created", item.index, item.name) 
             for issue in item.confirmed_fixed_issues:
                 # Create a text output of your auditor fixed issue in scope
-                attachment = "ID: {!s}\n Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}\n Issue: {!s}".format(issue.id, item.index, item.account, item.region, item.name, issue.issue)
+                attachment = "Account: {}\nRegion: {}\nIndex: {}\nItemName: {}\nItemActive: {}\nItemFoundNewIssues: {}\nAuditIssues: {}\nConfirmedNewIssues: {}\nConfirmedFixedIssues: {}\nConfirmedExistingIssues: {}\nNewConfig: {}\nOldConfig: {}\nActionInstructions: {}\nBackgroundInfo: {}\nFixed: {}\nIssueID: {}\nIssue: {}\nItemID: {}\nJustification: {}\nJustified: {}\nJustifiedDate: {}\nJustifiedUserID: {}\nNotes: {}\nOrigin: {}\nOriginSummary: {}\nIssueScore: {}".format(item.account, item.region, item.index, item.name, item.active, item.found_new_issue, item.audit_issues, item.confirmed_new_issues, item.confirmed_fixed_issues, item.confirmed_existing_issues, item.new_config, item.old_config, issue.action_instructions, issue.background_info, issue.fixed, issue.id, issue.issue, issue.item_id, issue.justification, issue.justified, issue.justified_date, issue.justified_user_id, issue.notes, issue.origin, issue.origin_summary, issue.score, issue.user)
                 print("attachment: " + attachment)
                 app.logger.info("Custom Alerter: confirmed_fixed_issues")
                 publish_to_sns(attachment)
