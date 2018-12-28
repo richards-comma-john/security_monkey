@@ -642,7 +642,7 @@ class ChangeItem(object):
         Save the item
         """
         app.logger.debug("Saving {}/{}/{}/{}\n\t{}".format(self.index, self.account, self.region, self.name, self.new_config))
-        app.logger.debug("Alerting {}/{}/{}/{}\n\t{}\n\t{}\n\t{}".format(self.index, self.account, self.region, self.name, self.new_config, self.old_config, self.confirmed_new_issues))
+        app.logger.debug("Alerting {}/{}/{}/{}\n\t{}\n\t{}\n\t{}".format(self.index, self.account, self.region, self.name, self.new_config, self.old_config, self.audit_issues))
 
         self.db_item = datastore.store(
             self.index,
