@@ -21,6 +21,9 @@
 
 """
 from security_monkey import app
+import boto3
+
+sns = boto3.client('sns', region_name='us-east-2')
 
 alerter_registry = []
 
@@ -30,6 +33,13 @@ class AlerterType(type):
             app.logger.debug("Registering alerter %s", cls.__name__)
             alerter_registry.append(cls)
 
+def publish_to_sns(Message):
+    sns.publish(
+        TopicArn='arn:aws:sns:us-east-2:254099312441:security-monkey-custom-alerter-topic',
+        Message=Message
+    )
+    return True
+
 def report_auditor_changes(auditor):
        for item in auditor.items:
             for issue in item.confirmed_new_issues:
@@ -37,12 +47,14 @@ def report_auditor_changes(auditor):
                 attachment = "ID: {!s}\n Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}\n Issue: {!s}".format(issue.id, item.index, item.account, item.region, item.name, issue.issue)
                 print("attachment: " + attachment)
                 app.logger.info("Custom Alerter: confirmed_new_issues")
+                publish_to_sns(attachment)
                 #postMessage(attachment, "Auditor - Reporting on Issue Created", item.index, item.name) 
             for issue in item.confirmed_fixed_issues:
                 # Create a text output of your auditor fixed issue in scope
                 attachment = "ID: {!s}\n Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}\n Issue: {!s}".format(issue.id, item.index, item.account, item.region, item.name, issue.issue)
                 print("attachment: " + attachment)
                 app.logger.info("Custom Alerter: confirmed_fixed_issues")
+                publish_to_sns(attachment)
                 #postMessage(attachment, "Auditor - Reporting on Issue Fixed", item.index, item.name) 
 
 def report_watcher_changes(watcher):
@@ -51,18 +63,18 @@ def report_watcher_changes(watcher):
         attachment = "Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}".format(item.index, item.account, item.region, item.name)
         print("attachment: " + attachment)
         app.logger.info("Custom Alerter: created_items")
-        #postMessage(attachment, "Watcher - Created Items", item.index, item.name) 
+        publish_to_sns(attachment)
 
     print(watcher.deleted_items)
     for item in watcher.deleted_items:
         attachment = "Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}".format(item.index, item.account, item.region, item.name)
         print("attachment: " + attachment)
         app.logger.info("Custom Alerter: deleted_items")
-        #postMessage(attachment, "Watcher - Deleted Items", item.index, item.name) 
+        publish_to_sns(attachment)
 
     print(watcher.changed_items)
     for item in watcher.changed_items:
         attachment = "Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}".format(item.index, item.account, item.region, item.name)
         print("attachment: " + attachment)
         app.logger.info("Custom Alerter: changed_items")
-        #postMessage(attachment, "Watcher - Changed Items", item.index, item.name)
+        publish_to_sns(attachment)
