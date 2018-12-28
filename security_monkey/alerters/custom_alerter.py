@@ -36,11 +36,13 @@ def report_auditor_changes(auditor):
                 # Create a text output of your auditor new issue in scope
                 attachment = "ID: {!s}\n Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}\n Issue: {!s}".format(issue.id, item.index, item.account, item.region, item.name, issue.issue)
                 print("attachment: " + attachment)
+                app.logger.info("Custom Alerter: confirmed_new_issues")
                 #postMessage(attachment, "Auditor - Reporting on Issue Created", item.index, item.name) 
             for issue in item.confirmed_fixed_issues:
                 # Create a text output of your auditor fixed issue in scope
                 attachment = "ID: {!s}\n Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}\n Issue: {!s}".format(issue.id, item.index, item.account, item.region, item.name, issue.issue)
                 print("attachment: " + attachment)
+                app.logger.info("Custom Alerter: confirmed_fixed_issues")
                 #postMessage(attachment, "Auditor - Reporting on Issue Fixed", item.index, item.name) 
 
 def report_watcher_changes(watcher):
@@ -48,16 +50,19 @@ def report_watcher_changes(watcher):
     for item in watcher.created_items:
         attachment = "Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}".format(item.index, item.account, item.region, item.name)
         print("attachment: " + attachment)
+        app.logger.info("Custom Alerter: created_items")
         #postMessage(attachment, "Watcher - Created Items", item.index, item.name) 
 
     print(watcher.deleted_items)
     for item in watcher.deleted_items:
         attachment = "Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}".format(item.index, item.account, item.region, item.name)
         print("attachment: " + attachment)
+        app.logger.info("Custom Alerter: deleted_items")
         #postMessage(attachment, "Watcher - Deleted Items", item.index, item.name) 
 
     print(watcher.changed_items)
     for item in watcher.changed_items:
         attachment = "Index: {!s}\n Account: {!s}\n Region: {!s}\n Name: {!s}".format(item.index, item.account, item.region, item.name)
         print("attachment: " + attachment)
+        app.logger.info("Custom Alerter: changed_items")
         #postMessage(attachment, "Watcher - Changed Items", item.index, item.name)
