@@ -517,7 +517,7 @@ class Watcher(object):
             app.logger.info("{} changed {} in {}".format(len(self.changed_items), self.i_am_plural, self.accounts))
             for item in self.changed_items:
                 item.save(self.datastore)
-        report_watcher_changes(self)
+        #report_watcher_changes(self)
 
     def plural_name(self):
         """
