@@ -52,8 +52,9 @@ def report_auditor_changes(auditor):
                 else:
                     old_config = item.old_config
 
-                attachment = '"Confirmed New Issue":\n\n"Account": "{}"\n\n"Region": "{}"\n\n"Index": "{}"\n\n"ItemName": "{}"\n\n"ItemActive": "{}"\n\n"ItemFoundNewIssues": "{}"\n\n"AuditIssues": "{}"\n\n"ConfirmedNewIssues": "{}"\n\n"NewConfig": "{}"\n\n"OldConfig": "{}"\n\n"ActionInstructions": "{}"\n\n"BackgroundInfo": "{}"\n\n"Fixed": "{}"\n\n"IssueID": "{}"\n\n"Issue": "{}"\n\n"ItemID": "{}"\n\n"Justification": "{}"\n\n"Justified": "{}"\n\n"JustifiedDate": "{}"\n\n"JustifiedUserID": "{}"\n\n"Notes": "{}"\n\n"Origin": "{}"\n\n"OriginSummary": "{}"\n\n"IssueScore": "{}"'.format(item.account, item.region, item.index, item.name, item.active, item.found_new_issue, item.audit_issues, item.confirmed_new_issues, item.new_config, old_config, issue.action_instructions, issue.background_info, issue.fixed, issue.id, issue.issue, issue.item_id, issue.justification, issue.justified, issue.justified_date, issue.justified_user_id, issue.notes, issue.origin, issue.origin_summary, issue.score, issue.user)
+                if issue.justified == False and issue.fixed == False:
+                    attachment = '"Confirmed New Issue":\n\n"Account": "{}"\n\n"Region": "{}"\n\n"Index": "{}"\n\n"ItemName": "{}"\n\n"ItemActive": "{}"\n\n"ItemFoundNewIssues": "{}"\n\n"AuditIssues": "{}"\n\n"ConfirmedNewIssues": "{}"\n\n"NewConfig": "{}"\n\n"OldConfig": "{}"\n\n"ActionInstructions": "{}"\n\n"BackgroundInfo": "{}"\n\n"Fixed": "{}"\n\n"IssueID": "{}"\n\n"Issue": "{}"\n\n"ItemID": "{}"\n\n"Justification": "{}"\n\n"Justified": "{}"\n\n"JustifiedDate": "{}"\n\n"JustifiedUserID": "{}"\n\n"Notes": "{}"\n\n"Origin": "{}"\n\n"OriginSummary": "{}"\n\n"IssueScore": "{}"'.format(item.account, item.region, item.index, item.name, item.active, item.found_new_issue, item.audit_issues, item.confirmed_new_issues, item.new_config, old_config, issue.action_instructions, issue.background_info, issue.fixed, issue.id, issue.issue, issue.item_id, issue.justification, issue.justified, issue.justified_date, issue.justified_user_id, issue.notes, issue.origin, issue.origin_summary, issue.score, issue.user)
 
-                app.logger.info("Custom Alerter: {}".format(attachment))
+                    app.logger.info("Custom Alerter: {}".format(attachment))
 
-                publish_to_sns(attachment)
+                    publish_to_sns(attachment)
