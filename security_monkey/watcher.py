@@ -16,7 +16,7 @@ from security_monkey import app, datastore
 from security_monkey.datastore import Technology, WatcherConfig, store_exception, Account, IgnoreListEntry, db, \
     ItemRevision, Datastore
 from security_monkey.common.jinja import get_jinja_env
-from security_monkey.alerters.custom_alerter import report_watcher_changes
+#from security_monkey.alerters.custom_alerter import report_watcher_changes
 
 from boto.exception import BotoServerError
 import time
