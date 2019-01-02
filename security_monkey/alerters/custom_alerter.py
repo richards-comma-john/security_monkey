@@ -23,6 +23,7 @@
 from security_monkey import app
 import boto3
 from security_monkey.datastore import db, ItemRevision
+import json
 sns = boto3.client('sns', region_name='us-east-2')
 
 alerter_registry = []
@@ -55,5 +56,32 @@ def report_auditor_changes(auditor):
                 if issue.justified == False and issue.fixed == False:
                     attachment = '"Confirmed New Issue":\n\n"Account": "{}"\n\n"Region": "{}"\n\n"Index": "{}"\n\n"ARN": "{}"\n\n"ItemName": "{}"\n\n"ItemActive": "{}"\n\n"ItemFoundNewIssues": "{}"\n\n"AuditIssues": "{}"\n\n"ConfirmedNewIssues": "{}"\n\n"NewConfig": "{}"\n\n"OldConfig": "{}"\n\n"ActionInstructions": "{}"\n\n"BackgroundInfo": "{}"\n\n"Fixed": "{}"\n\n"IssueID": "{}"\n\n"Issue": "{}"\n\n"ItemID": "{}"\n\n"Justification": "{}"\n\n"Justified": "{}"\n\n"JustifiedDate": "{}"\n\n"JustifiedUserID": "{}"\n\n"Notes": "{}"\n\n"Origin": "{}"\n\n"OriginSummary": "{}"\n\n"IssueScore": "{}"'.format(item.account, item.region, item.index, item.arn, item.name, item.active, item.found_new_issue, item.audit_issues, item.confirmed_new_issues, item.new_config, old_config, issue.action_instructions, issue.background_info, issue.fixed, issue.id, issue.issue, issue.item_id, issue.justification, issue.justified, issue.justified_date, issue.justified_user_id, issue.notes, issue.origin, issue.origin_summary, issue.score, issue.user)
                     attachment = "'Account': '{}','Region': '{}','Index': '{}','ARN': '{}','ItemName': '{}','ItemFoundNewIssues': '{}','NewConfig': '{}','OldConfig': '{}','ActionInstructions': '{}','BackgroundInfo': '{}','Fixed': '{}','IssueID': '{}','Issue': '{}','ItemID': '{}','Justification': '{}','Justified': '{}','JustifiedDate': '{}','JustifiedUserID': '{}','Notes': '{}','Origin': '{}','OriginSummary': '{}','IssueScore': '{}'".format(item.account, item.region, item.index, item.arn, item.name, item.found_new_issue, item.new_config, old_config, issue.action_instructions, issue.background_info, issue.fixed, issue.id, issue.issue, issue.item_id, issue.justification, issue.justified, issue.justified_date, issue.justified_user_id, issue.notes, issue.origin, issue.origin_summary, issue.score, issue.user),                    app.logger.info("Custom Alerter: {}".format(attachment))
-
+                    Message = {
+                        "Item": {
+                            "Account": item.account,
+                            "Region": item.region,
+                            "Index": item.index,
+                            "ARN": item.arn,
+                            "ItemName": item.name,
+                            "ItemFoundNewIssues": item.found_new_issue
+                        },
+                        "Issue": {
+                            "ActionInstructions": issue.action_instructions,
+                            "BackgroundInfo": issue.background_info,
+                            "Fixed": issue.fixed,
+                            "IssueID": issue.id,
+                            "Issue": issue.issue,
+                            "ItemID": issue.item_id,
+                            "Justification": issue.justification,
+                            "Justified": issue.justified,
+                            "JustifiedDate": issue.justified_date,
+                            "JustifiedUserID": issue.justified_user_id,
+                            "Notes": issue.notes,
+                            "OriginSummary": issue.origin_summary,
+                            "IssueScore": issue.score
+                        },
+                        "NewConfig": item.new_config,
+                        "OldConfig": old_config
+                    }
+                    attachment = json.dumps(Message)
                     publish_to_sns(attachment)
