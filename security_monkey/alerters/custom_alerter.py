@@ -74,7 +74,6 @@ def report_auditor_changes(auditor):
                             "ItemID": issue.item_id,
                             "Justification": issue.justification,
                             "Justified": issue.justified,
-                            "JustifiedDate": issue.justified_date,
                             "JustifiedUserID": issue.justified_user_id,
                             "Notes": issue.notes,
                             "OriginSummary": issue.origin_summary,
