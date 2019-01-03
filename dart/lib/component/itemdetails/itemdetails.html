@@ -72,16 +72,18 @@
       <tr>
         <th ng-if="us.hasRole('Justify')"></th>
         <th>Issue</th>
+        <th>Notes</th>
         <th>IssueID</th>
         <th>Score</th>
-        <th>Notes</th>
+        <th>Related to:</th>
       </tr>
       <tr ng-repeat="issue in item.unjustified_issues">
         <td ng-if="us.hasRole('Justify')"><div class="text-center"><input type="checkbox" ng-model="issue.selected_for_justification" /></div></td>
         <td>{{issue.issue}}</td>
+        <td>{{issue.notes}}</td>
         <td>{{issue.id}}</td>
         <td>{{issue.score}}</td>
-        <td ng-if="issue.has_sub_item">Related to:
+        <td ng-if="issue.has_sub_item">
           <ul class="list-unstyled">
             <li ng-repeat="link in issue.item_links">
               <a href="#/viewitem/{{link.id}}">{{link.name}}
