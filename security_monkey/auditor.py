@@ -982,27 +982,52 @@ class Auditor(object):
 
         return total
 
-    def link_to_support_item_issues(self, item, sub_item, sub_issue_message=None, issue_message=None, issue=None, score=None):
+    def link_to_support_item_issues(self, item, sub_item, sub_issue_message=None, issue_message=None, issue=None, score=None, mp_arn=None):
         """
         Creates a new issue that is linked to an issue in a support auditor
         """
-        matching_issues = []
-        for sub_issue in sub_item.issues:
-            if sub_issue.fixed:
-                continue
-            if not sub_issue_message or sub_issue.issue == sub_issue_message:
-                matching_issues.append(sub_issue)
+        if mp_arn == None:
+            matching_issues = []
+            for sub_issue in sub_item.issues:
+                if sub_issue.fixed:
+                    continue
+                if not sub_issue_message or sub_issue.issue == sub_issue_message:
+                    matching_issues.append(sub_issue)
 
-        for matching_issue in matching_issues:
+            for matching_issue in matching_issues:
+                if issue:
+                    issue.score = self._sum_item_score(score, issue, matching_issue)
+                else:
+                    issue_message = issue_message or sub_issue_message or 'UNDEFINED'
+                    link_score = score or matching_issue.score
+                    issue = self.add_issue(link_score, issue_message, item)
+                  #  print item
+                  #  print sub_issue_message
+                  #  print issue_message
+                  #  print issue
+                  #  print score
+
             if issue:
-                issue.score = self._sum_item_score(score, issue, matching_issue)
-            else:
-                issue_message = issue_message or sub_issue_message or 'UNDEFINED'
-                link_score = score or matching_issue.score
-                issue = self.add_issue(link_score, issue_message, item)
+                issue.sub_items.append(sub_item)
+        if mp_arn != None:
+            matching_issues = []
+            for sub_issue in sub_item.issues:
+                if sub_issue.fixed:
+                    continue
+                if not sub_issue_message or sub_issue.issue == sub_issue_message:
+                    matching_issues.append(sub_issue)
 
-        if issue:
-            issue.sub_items.append(sub_item)
+            for matching_issue in matching_issues:
+                if issue:
+                    issue.score = self._sum_item_score(score, issue, matching_issue)
+                else:
+                    issue_message = issue_message or sub_issue_message or 'UNDEFINED'
+                    link_score = score or matching_issue.score
+                    notes = mp_arn
+                    issue = self.add_issue(link_score, issue_message, item, notes)
+
+            if issue:
+                issue.sub_items.append(sub_item)
 
     def link_to_support_item(self, score, issue_message, item, sub_item, issue=None):
         """
