@@ -1001,11 +1001,6 @@ class Auditor(object):
                     issue_message = issue_message or sub_issue_message or 'UNDEFINED'
                     link_score = score or matching_issue.score
                     issue = self.add_issue(link_score, issue_message, item)
-                  #  print item
-                  #  print sub_issue_message
-                  #  print issue_message
-                  #  print issue
-                  #  print score
 
             if issue:
                 issue.sub_items.append(sub_item)
@@ -1019,7 +1014,8 @@ class Auditor(object):
 
             for matching_issue in matching_issues:
                 if issue:
-                    issue.score = self._sum_item_score(score, issue, matching_issue)
+                    if issue.issue != matching_issue.issue:
+                        issue.score = self._sum_item_score(score, issue, matching_issue)
                 else:
                     issue_message = issue_message or sub_issue_message or 'UNDEFINED'
                     link_score = score or matching_issue.score
