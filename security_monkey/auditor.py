@@ -265,7 +265,10 @@ class Auditor(object):
             from_port = int(match.group(1))
             to_port = int(match.group(2))
         else:
-            from_port = to_port = int(port)
+            try:
+                from_port = to_port = int(port)
+            except:
+                return False
 
         for listener_port in listener_ports:
             if int(listener_port) >= from_port and int(listener_port) <= to_port:
