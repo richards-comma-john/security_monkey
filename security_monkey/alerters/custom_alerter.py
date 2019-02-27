@@ -35,10 +35,14 @@ class AlerterType(type):
             alerter_registry.append(cls)
 
 def publish_to_sns(Message):
-    sns.publish(
-        TopicArn='arn:aws:sns:us-east-2:254099312441:security-monkey-custom-alerter-topic',
-        Message=Message
-    )
+    try:
+        sns.publish(
+            TopicArn='arn:aws:sns:us-east-2:254099312441:security-monkey-custom-alerter-topic',
+            Message=Message
+        )
+    except:
+        app.logger.debug("SNS Message too long, not sent")
+        app.logger.debug(Message)
     return True
 
 def report_auditor_changes(auditor):
